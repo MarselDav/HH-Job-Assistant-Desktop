@@ -1,0 +1,69 @@
+QWidget#vacanciesSearchPage {
+	background: #111319;
+	color: #f3f4f6;
+}
+
+QLabel#pageEyebrow {
+	color: #9b90ff;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1px;
+}
+
+QLabel#pageTitle {
+	color: #f4f5fa;
+	font-size: 27px;
+	font-weight: 700;
+}
+
+QLabel#pageSubtitle {
+	color: #9299a9;
+	font-size: 13px;
+}
+
+QLabel#resultsLabel {
+	color: #aeb3c1;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+QLabel#emptyVacanciesLabel {
+	color: #858c9c;
+	font-size: 14px;
+	padding: 48px 12px;
+}
+
+QScrollArea {
+	border: 0;
+	background: transparent;
+}
+
+QScrollBar:vertical {
+	background: transparent;
+	width: 8px;
+	margin: 2px;
+}
+
+QScrollBar::handle:vertical {
+	background: #353a48;
+	border-radius: 4px;
+	min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+	background: #514b70;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+	height: 0;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+	background: transparent;
+}
+
+QWidget#vacanciesList {
+	background: transparent;
+}

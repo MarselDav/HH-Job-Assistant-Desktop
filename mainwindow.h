@@ -3,21 +3,21 @@
 
 #include <QMainWindow>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
+class QStackedWidget;
+class QPushButton;
+class ApiClient;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
 
 private:
-    Ui::MainWindow *ui;
+    QStackedWidget *page_stack;
+    ApiClient *api_client;
+    QPushButton *resume_button;
 };
+
 #endif // MAINWINDOW_H

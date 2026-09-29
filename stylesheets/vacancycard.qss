@@ -1,0 +1,60 @@
+QFrame#vacancyCard {
+	background: #191c25;
+	border: 1px solid #2c303c;
+	border-radius: 18px;
+}
+
+QFrame#vacancyCard:hover {
+	background: #1d202a;
+	border-color: #484363;
+}
+
+QFrame#vacancyCard QLabel {
+	background: transparent;
+	border: 0;
+}
+
+QLabel#vacancyTitle {
+	color: #f4f5fa;
+	font-size: 17px;
+	font-weight: 700;
+}
+
+QLabel#vacancySalary {
+	color: #a99fff;
+	font-size: 15px;
+	font-weight: 700;
+}
+
+QLabel#vacancyMeta {
+	color: #a5abba;
+	font-size: 13px;
+}
+
+QLabel#vacancyDescription {
+	color: #c2c6d1;
+	font-size: 13px;
+}
+
+QLabel#vacancyTag {
+	color: #aeb3c1;
+	background: #252936;
+	border-radius: 8px;
+	padding: 6px 9px;
+	font-size: 12px;
+}
+
+QPushButton#vacancyOpenButton {
+	color: #d4d0ff;
+	background: #29263d;
+	border: 1px solid #403a63;
+	border-radius: 9px;
+	padding: 8px 12px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+QPushButton#vacancyOpenButton:hover {
+	background: #373153;
+	border-color: #625a91;
+}

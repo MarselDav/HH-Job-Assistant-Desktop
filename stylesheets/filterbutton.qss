@@ -1,0 +1,57 @@
+QPushButton#filtersButton {
+	color: #e7e8ef;
+	background: #20232d;
+	border: 1px solid #303543;
+	border-radius: 14px;
+	padding: 0 16px;
+	font-size: 14px;
+	font-weight: 600;
+	text-align: left;
+}
+
+QPushButton#filtersButton:hover {
+	background: #292d39;
+	border-color: #494f61;
+}
+
+QPushButton#filtersButton:pressed {
+	background: #303443;
+}
+
+QPushButton#filtersButton::menu-indicator {
+	width: 0;
+	image: none;
+}
+
+QMenu#filtersMenu {
+	background: #20232d;
+	border: 1px solid #343948;
+	border-radius: 14px;
+	padding: 10px;
+}
+
+QMenu#filtersMenu QWidget {
+	color: #eceef5;
+	font-size: 13px;
+}
+
+QMenu#filtersMenu QComboBox,
+QMenu#filtersMenu QSpinBox {
+	background: #171a22;
+	color: #f3f4f6;
+	border: 1px solid #343948;
+	border-radius: 8px;
+	padding: 8px 10px;
+	min-width: 170px;
+}
+
+QMenu#filtersMenu QComboBox::drop-down {
+	border: 0;
+	width: 24px;
+}
+
+QMenu#filtersMenu QComboBox QAbstractItemView {
+	background: #20232d;
+	color: #f3f4f6;
+	selection-background-color: #5147a8;
+}

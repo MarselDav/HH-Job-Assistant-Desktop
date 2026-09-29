@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="images/filter.png">images/filter.png</file>
+    </qresource>
+    <qresource prefix="/stylesheets">
+        <file alias="mainwindow.qss">stylesheets/mainwindow.qss</file>
+        <file alias="vacanciessearchwidget.qss">stylesheets/vacanciessearchwidget.qss</file>
+        <file alias="searchfield.qss">stylesheets/searchfield.qss</file>
+        <file alias="filterbutton.qss">stylesheets/filterbutton.qss</file>
+        <file alias="vacancycard.qss">stylesheets/vacancycard.qss</file>
+        <file alias="resumeanalyzerwidget.qss">stylesheets/resumeanalyzerwidget.qss</file>
+        <file alias="resumecard.qss">stylesheets/resumecard.qss</file>
+    </qresource>
+    <qresource prefix="/templates">
+        <file alias="resume_analysis_patter.html">templates/resume_analysis_patter.html</file>
+    </qresource>
+</RCC>

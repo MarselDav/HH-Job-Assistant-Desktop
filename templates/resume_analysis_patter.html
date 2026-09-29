@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { color: #d8dbe5; background: #151820; font-family: "Segoe UI", sans-serif; line-height: 1.55; }
+    h1 { color: #f4f5fa; font-size: 23px; margin: 0 0 5px; }
+    .experience { color: #a99fff; font-size: 13px; margin: 0 0 20px; }
+    .summary { color: #c4c8d3; background: #1d202a; border-left: 3px solid #8879ff; border-radius: 5px; padding: 12px 14px; margin: 0 0 20px; }
+    h2 { color: #f0f1f7; font-size: 14px; margin: 19px 0 6px; }
+    p { margin: 0; }
+    .details { color: #b8bdca; }
+  </style>
+</head>
+<body>
+  <h1>{{profession_name}}</h1>
+  <p class="experience">Опыт: {{experience}}</p>
+  <p class="summary">{{brief_description}}</p>
+
+  <h2>Навыки по уровню владения</h2>
+  <p class="details">{{skills}}</p>
+
+  <h2>Языки</h2>
+  <p class="details">{{languages}}</p>
+
+  <h2>Форматы работы</h2>
+  <p class="details">{{work_formats}}</p>
+
+  <h2>График по дням</h2>
+  <p class="details">{{work_schedule_by_days}}</p>
+
+  <h2>Рабочие часы</h2>
+  <p class="details">{{working_hours}}</p>
+</body>
+</html>

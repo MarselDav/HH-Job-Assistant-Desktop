@@ -1,0 +1,57 @@
+QMainWindow {
+	background: #111319;
+}
+
+QWidget#sidebar {
+	background: #171920;
+	border-right: 1px solid #252833;
+}
+
+QLabel#brandMark {
+	color: #a99fff;
+	font-size: 19px;
+	font-weight: 800;
+	background: #29263c;
+	border-radius: 13px;
+	min-width: 42px;
+	max-width: 42px;
+	min-height: 42px;
+	max-height: 42px;
+}
+
+QLabel#brandName {
+	color: #f0f1f7;
+	font-size: 13px;
+	font-weight: 700;
+}
+
+QLabel#brandCaption {
+	color: #777e8e;
+	font-size: 11px;
+}
+
+QPushButton#navButton {
+	color: #9298a8;
+	background: transparent;
+	border: 0;
+	border-radius: 11px;
+	padding: 12px 13px;
+	text-align: left;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+QPushButton#navButton:hover {
+	color: #f2f2f7;
+	background: #232630;
+}
+
+QPushButton#navButton:checked {
+	color: #c5bfff;
+	background: #29263d;
+}
+
+QLabel#sidebarHint {
+	color: #717888;
+	font-size: 11px;
+}

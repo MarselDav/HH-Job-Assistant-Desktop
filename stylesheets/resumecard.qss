@@ -1,0 +1,16 @@
+QFrame#resumeCard {
+	background: #20232d;
+	border: 1px solid #343948;
+	border-radius: 12px;
+}
+
+QFrame#resumeCard:hover {
+	background: #262a36;
+	border-color: #514b70;
+}
+
+QLabel#resumeCardName {
+	color: #e9eaf1;
+	font-size: 13px;
+	font-weight: 600;
+}

@@ -1,0 +1,18 @@
+QLineEdit#searchField {
+	background: #171a22;
+	color: #f3f4f6;
+	border: 1px solid #2a2f3b;
+	border-radius: 14px;
+	padding: 0 16px;
+	selection-background-color: #7768f5;
+	font-size: 14px;
+}
+
+QLineEdit#searchField:focus {
+	border: 1px solid #8879ff;
+	background: #1a1d27;
+}
+
+QLineEdit#searchField::placeholder {
+	color: #737b8d;
+}

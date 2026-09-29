@@ -1,0 +1,175 @@
+QWidget#resumeAnalyzerPage {
+	background: #111319;
+	color: #f3f4f6;
+}
+
+QWidget#resumePageContent {
+	background: #111319;
+}
+
+QLabel#pageEyebrow {
+	color: #9b90ff;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1px;
+}
+
+QLabel#pageTitle {
+	color: #f4f5fa;
+	font-size: 27px;
+	font-weight: 700;
+}
+
+QLabel#pageSubtitle {
+	color: #9299a9;
+	font-size: 13px;
+}
+
+QLabel#resumesTitle {
+	color: #f4f5fa;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+QLabel#emptyResumesLabel {
+	color: #858c9c;
+	font-size: 12px;
+	padding: 14px;
+}
+
+QScrollArea#resumePageScrollArea,
+QScrollArea#resumeCardsScrollArea {
+	border: 0;
+	background: transparent;
+}
+
+QFrame#resumePanel {
+	background: #191c25;
+	border: 1px solid #2c303c;
+	border-radius: 18px;
+}
+
+QLabel#panelTitle {
+	color: #f4f5fa;
+	font-size: 17px;
+	font-weight: 700;
+}
+
+QLabel#panelHint {
+	color: #9299a9;
+	font-size: 12px;
+}
+
+QLineEdit#resumeNameField {
+	background: #151820;
+	color: #f3f4f6;
+	border: 1px solid #343948;
+	border-radius: 9px;
+	padding: 10px 12px;
+	font-size: 13px;
+}
+
+QLineEdit#resumeNameField:focus {
+	border-color: #8879ff;
+}
+
+QLineEdit#resumeNameField::placeholder {
+	color: #737b8d;
+}
+
+QFrame#resumeDropZone {
+	background: #171a22;
+	border: 1px solid #464b5b;
+	border-radius: 14px;
+}
+
+QFrame#resumeDropZone:hover {
+	background: #1b1e28;
+	border-color: #8879ff;
+}
+
+QLabel#dropIcon {
+	color: #b5acff;
+	background: #29263c;
+	border-radius: 12px;
+	font-size: 13px;
+	font-weight: 800;
+	min-width: 54px;
+	max-width: 54px;
+	min-height: 44px;
+	max-height: 44px;
+}
+
+QLabel#dropTitle {
+	color: #e8e9f0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+QLabel#fileStatus {
+	color: #c6c9d4;
+	font-size: 12px;
+}
+
+QPushButton#primaryButton,
+QPushButton#secondaryButton {
+	color: #f7f6ff;
+	background: #6558d9;
+	border: 1px solid #776be9;
+	border-radius: 10px;
+	padding: 10px 14px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+QPushButton#primaryButton:hover,
+QPushButton#secondaryButton:hover {
+	background: #7568e8;
+}
+
+QPushButton#primaryButton:disabled {
+	color: #747987;
+	background: #292c36;
+	border-color: #343845;
+}
+
+QPushButton#secondaryButton {
+	color: #d9d5ff;
+	background: #29263d;
+	border-color: #403a63;
+}
+
+QTextBrowser#analysisBrowser {
+	color: #d8dbe5;
+	background: #151820;
+	border: 1px solid #2b303b;
+	border-radius: 12px;
+	padding: 14px;
+	font-size: 13px;
+}
+
+QScrollBar:vertical {
+	background: transparent;
+	width: 8px;
+	margin: 2px;
+}
+
+QScrollBar::handle:vertical {
+	background: #353a48;
+	border-radius: 4px;
+	min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+	background: #514b70;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+	height: 0;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+	background: transparent;
+}

@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,14 +9,30 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    apiclient.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    searchfield.cpp \
+    filterbutton.cpp \
+    resumeanalyzerwidget.cpp \
+    resumecard.cpp \
+    vacanciessearchwidget.cpp \
+    vacancycard.cpp
 
 HEADERS += \
-    mainwindow.h
+    apiclient.h \
+    mainwindow.h \
+    stylesheetloader.h \
+    searchfield.h \
+    filterbutton.h \
+    resumeanalyzerwidget.h \
+    resumecard.h \
+    vacanciessearchwidget.h \
+    vacancycard.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    vacancycard.ui
 
 TRANSLATIONS += \
     HH-Job-Assistant-Desktop_ru_RU.ts
@@ -27,3 +43,6 @@ CONFIG += embed_translations
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc
