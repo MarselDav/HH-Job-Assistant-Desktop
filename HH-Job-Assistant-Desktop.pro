@@ -2,7 +2,7 @@ QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17
+CONFIG += c++17 console
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -10,22 +10,30 @@ CONFIG += c++17
 
 SOURCES += \
     apiclient.cpp \
+    flowlayout.cpp \
     main.cpp \
     mainwindow.cpp \
+    resumehistorymanager.cpp \
     searchfield.cpp \
     filterbutton.cpp \
     resumeanalyzerwidget.cpp \
+    resumedropzone.cpp \
+    jsonformatter.cpp \
     resumecard.cpp \
     vacanciessearchwidget.cpp \
     vacancycard.cpp
 
 HEADERS += \
     apiclient.h \
+    flowlayout.h \
     mainwindow.h \
+    resumehistorymanager.h \
     stylesheetloader.h \
     searchfield.h \
     filterbutton.h \
     resumeanalyzerwidget.h \
+    resumedropzone.h \
+    jsonformatter.h \
     resumecard.h \
     vacanciessearchwidget.h \
     vacancycard.h

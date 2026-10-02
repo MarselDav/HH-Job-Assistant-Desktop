@@ -1,16 +1,4 @@
 #include "filterbutton.h"
-#include "stylesheetloader.h"
-
-#include <QComboBox>
-#include <QFormLayout>
-#include <QIcon>
-#include <QMenu>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QStyle>
-#include <QStyleOptionButton>
-#include <QSpinBox>
-#include <QWidgetAction>
 
 FilterButton::FilterButton(QWidget *parent)
     : QPushButton(QStringLiteral("Фильтры"), parent),
@@ -31,6 +19,7 @@ FilterButton::FilterButton(QWidget *parent)
 
     QWidget *panel = new QWidget(menu);
     QFormLayout *form = new QFormLayout(panel);
+    panel->setMaximumHeight(100);
     form->setContentsMargins(10, 8, 10, 10);
     form->setHorizontalSpacing(18);
     form->setVerticalSpacing(12);

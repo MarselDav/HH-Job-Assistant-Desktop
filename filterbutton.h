@@ -2,10 +2,19 @@
 #define FILTERBUTTON_H
 
 #include <QPushButton>
+#include "stylesheetloader.h"
 
-class QComboBox;
-class QSpinBox;
-class QPaintEvent;
+#include <QComboBox>
+#include <QFormLayout>
+#include <QIcon>
+#include <QMenu>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QSpinBox>
+#include <QStyle>
+#include <QStyleOptionButton>
+#include <QWidgetAction>
+#include <QScrollArea>
 
 class FilterButton : public QPushButton
 {

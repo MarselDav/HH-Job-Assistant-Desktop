@@ -3,12 +3,20 @@
 
 #include <QWidget>
 #include <QJsonArray>
-
-class QScrollArea;
-class QVBoxLayout;
-class SearchField;
-class FilterButton;
-class ApiClient;
+#include <QHBoxLayout>
+#include <QJsonObject>
+#include <QFrame>
+#include <QLabel>
+#include <QLayoutItem>
+#include <QLineEdit>
+#include <QScrollArea>
+#include <QStringList>
+#include <QVBoxLayout>
+#include "apiclient.h"
+#include "filterbutton.h"
+#include "searchfield.h"
+#include "stylesheetloader.h"
+#include "vacancycard.h"
 
 class VacanciesSearchWidget : public QWidget
 {

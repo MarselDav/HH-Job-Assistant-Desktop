@@ -1,12 +1,4 @@
 #include "vacancycard.h"
-#include "stylesheetloader.h"
-
-#include <QDesktopServices>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QUrl>
-#include <QVBoxLayout>
 
 VacancyCard::VacancyCard(qint64 db_id,
                          qint64 vacancy_id,

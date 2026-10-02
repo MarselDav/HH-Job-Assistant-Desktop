@@ -1,5 +1,4 @@
 #include "searchfield.h"
-#include "stylesheetloader.h"
 
 SearchField::SearchField(QWidget *parent) : QLineEdit(parent)
 {

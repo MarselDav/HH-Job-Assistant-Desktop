@@ -1,156 +1,12 @@
 #include "resumeanalyzerwidget.h"
 
-#include "apiclient.h"
-#include "resumecard.h"
-#include "stylesheetloader.h"
 
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QFile>
-#include <QFileDialog>
-#include <QFileInfo>
-#include <QFrame>
-#include <QHBoxLayout>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonValue>
-#include <QLabel>
-#include <QLineEdit>
-#include <QMimeData>
-#include <QPushButton>
-#include <QScrollArea>
-#include <QStringList>
-#include <QTextBrowser>
-#include <QUrl>
-#include <QVBoxLayout>
-
-#include <functional>
-
-namespace {
-
-class ResumeDropZone : public QFrame
-{
-public:
-    explicit ResumeDropZone(QWidget *parent = nullptr) : QFrame(parent)
-    {
-        setObjectName("resumeDropZone");
-        setAcceptDrops(true);
-    }
-
-    std::function<void(const QString &)> onFileDropped;
-
-protected:
-    void dragEnterEvent(QDragEnterEvent *event) override
-    {
-        if (!event->mimeData()->hasUrls()) {
-            event->ignore();
-            return;
-        }
-
-        const QList<QUrl> urls = event->mimeData()->urls();
-        if (!urls.isEmpty() && urls.first().isLocalFile()
-            && QFileInfo(urls.first().toLocalFile()).suffix().compare(QStringLiteral("txt"), Qt::CaseInsensitive) == 0) {
-            event->acceptProposedAction();
-            return;
-        }
-        event->ignore();
-    }
-
-    void dropEvent(QDropEvent *event) override
-    {
-        const QList<QUrl> urls = event->mimeData()->urls();
-        if (urls.isEmpty() || !urls.first().isLocalFile()) {
-            event->ignore();
-            return;
-        }
-
-        const QString path = urls.first().toLocalFile();
-        if (QFileInfo(path).suffix().compare(QStringLiteral("txt"), Qt::CaseInsensitive) != 0) {
-            event->ignore();
-            return;
-        }
-
-        if (onFileDropped)
-            onFileDropped(path);
-        event->acceptProposedAction();
-    }
-};
-
-QString jsonValueText(const QJsonValue &value)
-{
-    if (value.isString())
-        return value.toString();
-    if (value.isDouble())
-        return QString::number(value.toDouble());
-    if (value.isBool())
-        return value.toBool() ? QStringLiteral("Да") : QStringLiteral("Нет");
-    if (value.isObject())
-        return QString::fromUtf8(QJsonDocument(value.toObject()).toJson(QJsonDocument::Compact));
-    return QString();
-}
-
-QString objectField(const QJsonObject &object, const QStringList &names)
-{
-    for (const QString &name : names) {
-        const QString value = jsonValueText(object.value(name));
-        if (!value.isEmpty())
-            return value;
-    }
-    return QString();
-}
-
-QString formatItem(const QJsonValue &value, bool includeLevel)
-{
-    if (value.isString())
-        return value.toString().toHtmlEscaped();
-    if (!value.isObject())
-        return jsonValueText(value).toHtmlEscaped();
-
-    const QJsonObject object = value.toObject();
-    QString name = objectField(object, {QStringLiteral("name"), QStringLiteral("skill"),
-                                        QStringLiteral("language"), QStringLiteral("title")});
-    QString level;
-    if (includeLevel)
-        level = objectField(object, {QStringLiteral("level"), QStringLiteral("proficiency_level"),
-                                     QStringLiteral("proficiency"), QStringLiteral("level_name")});
-
-    if (name.isEmpty())
-        name = jsonValueText(value);
-    QString result = name.toHtmlEscaped();
-    if (!level.isEmpty())
-        result += QStringLiteral(" — ") + level.toHtmlEscaped();
-    return result;
-}
-
-QString formatArray(const QJsonValue &value, bool includeLevel)
-{
-    if (!value.isArray())
-        return QStringLiteral("Не указано");
-
-    QStringList values;
-    for (const QJsonValue &item : value.toArray()) {
-        const QString formatted = formatItem(item, includeLevel);
-        if (!formatted.isEmpty())
-            values.append(formatted);
-    }
-    return values.isEmpty() ? QStringLiteral("Не указано")
-                            : values.join(QStringLiteral(" · "));
-}
-
-QString experienceLabel(const QString &value)
-{
-    if (value == QLatin1String("noExperience")) return QStringLiteral("Нет опыта");
-    if (value == QLatin1String("between1And3")) return QStringLiteral("От 1 до 3 лет");
-    if (value == QLatin1String("between3And6")) return QStringLiteral("От 3 до 6 лет");
-    if (value == QLatin1String("moreThan6")) return QStringLiteral("Более 6 лет");
-    return value.isEmpty() ? QStringLiteral("Не указано") : value;
-}
-
-} // namespace
-
-ResumeAnalyzerWidget::ResumeAnalyzerWidget(ApiClient *apiClient, QWidget *parent)
+ResumeAnalyzerWidget::ResumeAnalyzerWidget(ApiClient *apiClient,
+                                           ResumeHistoryManager* resumeManager,
+                                           QWidget *parent)
     : QWidget(parent),
       api_client(apiClient),
+      resume_manager(resumeManager),
       pending_resume_title(),
       selected_file_label(nullptr),
       upload_status_label(nullptr),
@@ -199,10 +55,12 @@ ResumeAnalyzerWidget::ResumeAnalyzerWidget(ApiClient *apiClient, QWidget *parent
     resume_cards_scroll_area->setWidgetResizable(true);
     resume_cards_scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     resume_cards_scroll_area->setFrameShape(QFrame::NoFrame);
-    resume_cards_scroll_area->setMinimumHeight(82);
-    resume_cards_scroll_area->setMaximumHeight(150);
+    resume_cards_scroll_area->setMinimumHeight(200);
+    resume_cards_scroll_area->setMaximumHeight(400);
 
     QWidget *resume_cards_container = new QWidget;
+    resume_cards_container->setStyleSheet("background-color: transparent;");
+
     QVBoxLayout *resume_cards_container_layout = new QVBoxLayout(resume_cards_container);
     resume_cards_container_layout->setContentsMargins(1, 1, 8, 1);
     resume_cards_container_layout->setSpacing(8);
@@ -321,14 +179,25 @@ ResumeAnalyzerWidget::ResumeAnalyzerWidget(ApiClient *apiClient, QWidget *parent
         if (!path.isEmpty())
             selectResumeFile(path);
     });
-    drop_zone->onFileDropped = [this](const QString &path) { selectResumeFile(path); };
+    connect(drop_zone, &ResumeDropZone::fileDropped,
+            this, &ResumeAnalyzerWidget::selectResumeFile);
     connect(upload_button, &QPushButton::clicked, this, &ResumeAnalyzerWidget::uploadResume);
     connect(resume_name_field, &QLineEdit::textChanged,
             this, &ResumeAnalyzerWidget::updateUploadButtonState);
-    connect(analyze_button, &QPushButton::clicked, this, &ResumeAnalyzerWidget::analyzeResume);
+    connect(analyze_button, &QPushButton::clicked, this, [this]{analyzeResume(resume_id);});
 
     connect(api_client, &ApiClient::resumeUploaded, this, &ResumeAnalyzerWidget::onResumeUploaded);
     connect(api_client, &ApiClient::resumeAnalyzed, this, &ResumeAnalyzerWidget::setResumeAnalysis);
+    connect(api_client, &ApiClient::resumesGotten, this, &ResumeAnalyzerWidget::addResumeCardsArray);
+
+    initializeResumes();
+}
+
+void ResumeAnalyzerWidget::initializeResumes()
+{
+    QList<int> resumeList = resume_manager->getResumes();
+
+    api_client->getResumes(resumeList);
 }
 
 void ResumeAnalyzerWidget::selectResumeFile(const QString &path)
@@ -362,20 +231,58 @@ void ResumeAnalyzerWidget::uploadResume()
 }
 
 
-void ResumeAnalyzerWidget::onResumeUploaded(const QJsonObject &resumeReply)
-{
-    resume_id = resumeReply["resume_id"].toInt();
-    analyze_button->setEnabled(true);
-    upload_status_label->setText(QStringLiteral("Резюме загружено"));
+void ResumeAnalyzerWidget::addResumeCard(const int &resumeID,
+                                         const QString &title,
+                                         const QJsonObject &resumeAnalysis) {
+    if (resume_cards_layout->count() >= 2) { // QSpacerItem тоже считается
 
-    if (empty_resumes_label) {
-        resume_cards_layout->removeWidget(empty_resumes_label);
-        delete empty_resumes_label;
-        empty_resumes_label = nullptr;
+        empty_resumes_label->setVisible(false);
     }
 
     const int cardIndex = qMax(0, resume_cards_layout->count() - 1);
-    resume_cards_layout->insertWidget(cardIndex, new ResumeCard(pending_resume_title));
+
+    ResumeCard* resumeCard = new ResumeCard(resumeID, title, resumeAnalysis);
+    connect(resumeCard, &ResumeCard::deleteResume, this, ResumeAnalyzerWidget::onResumeDelete);
+    connect(resumeCard, &ResumeCard::resumeAnalyzeButtonClicked,
+            this, ResumeAnalyzerWidget::analyzeResume);
+    resume_cards_layout->insertWidget(cardIndex, resumeCard);
+}
+
+void ResumeAnalyzerWidget::onResumeDelete() {
+    auto* resumeCard = qobject_cast<ResumeCard*>(sender());
+    if (!resumeCard)
+        return;
+
+    api_client->deleteResume(resumeCard->resume_id);
+    resumeCard->setEnabled(false);
+
+    connect(api_client, &ApiClient::resumeDeleted, this, [this, resumeCard](bool status){
+        if (status){
+            this->resume_cards_layout->removeWidget(resumeCard);
+            resumeCard->deleteLater();
+
+            if (this->resume_cards_layout->count() == 2) { // QSpacerItem тоже считается
+
+                this->empty_resumes_label->setVisible(true);
+            }
+        } else {
+            resumeCard->setEnabled(true);
+            qWarning() << "[ResumeAnalyzerWidget][onResumeDelete] "
+                          "Не удалось удалить резюме с сервера";
+        }
+    });
+}
+
+void ResumeAnalyzerWidget::onResumeUploaded(const QJsonObject &resumeReply)
+{
+    resume_id = resumeReply["resume_id"].toInt();
+    resume_manager->addResume(resume_id);
+
+    analyze_button->setEnabled(true);
+    upload_status_label->setText(QStringLiteral("Резюме загружено"));
+
+    addResumeCard(resume_id, pending_resume_title, QJsonObject());
+
     pending_resume_title.clear();
     selected_resume_path.clear();
     selected_file_label->setText(QStringLiteral("Файл не выбран"));
@@ -383,16 +290,50 @@ void ResumeAnalyzerWidget::onResumeUploaded(const QJsonObject &resumeReply)
     updateUploadButtonState();
 }
 
-void ResumeAnalyzerWidget::analyzeResume()
+void ResumeAnalyzerWidget::analyzeResume(const int& resumeID)
 {
-    if (resume_id < 0)
+    if (resumeID < 0)
     {
-        qDebug() << "Резюме не было загружено, анализ невозможен";
+        qDebug() << "[ResumeAnalyzerWidget][analyzeResume] Резюме не было загружено, "
+                    "анализ невозможен";
     }
 
-    // api_client->analyzeResume(resume_id);
+    api_client->analyzeResume(resumeID);
 
-    api_client->analyzeResume(1); // для тестирования, анализ с таким id уже существует и не тратит ресурсы
+    // api_client->analyzeResume(1); // для тестирования, анализ с таким id уже существует и не тратит ресурсы
+}
+
+void ResumeAnalyzerWidget::addResumeCardsArray(const QJsonArray &resumesAnalysisArray)
+{
+    for (const QJsonValue &value : resumesAnalysisArray)
+    {
+        if (!value.isObject())
+        {
+            qWarning() << "[ResumeAnalyzerWidget][addResumeCardsArray] "
+                          "Один из элементов списка не QJsonObject";
+        }
+
+        QJsonObject resume = value.toObject();
+
+        addResumeCard(resume.value("id").toInt(),
+                      resume.value("name").toString(), resume.value("analysis").toObject());
+    }
+}
+
+void ResumeAnalyzerWidget::setAnalysisResumeCard(const QJsonObject &resumeAnalysis){
+    int resume_id = resumeAnalysis.value("resume_id").toInt();
+
+    for (int i = 0; i < resume_cards_layout->count(); i++){
+        auto* resumeCard = qobject_cast<ResumeCard*>(resume_cards_layout->itemAt(i)->widget());
+
+        if (!resumeCard)
+            continue;
+
+        if (resumeCard->resume_id == resume_id){
+            resumeCard->setResumeAnalysis(resumeAnalysis.value("resume_analysis").toObject());
+            return;
+        }
+    }
 }
 
 void ResumeAnalyzerWidget::setResumeAnalysis(const QJsonObject &resumeAnalysis)
@@ -403,6 +344,14 @@ void ResumeAnalyzerWidget::setResumeAnalysis(const QJsonObject &resumeAnalysis)
         return;
     }
 
+    if (!resumeAnalysis.contains("resume_analysis"))
+    {
+        qWarning() << "[ResumeAnalyzerWidget][setResumeAnalysis] "
+                      "Информация о резюме не содержит анализа";
+        return;
+    }
+
+    setAnalysisResumeCard(resumeAnalysis);
     QJsonObject analysis = resumeAnalysis.value("resume_analysis").toObject();
 
     QString html = QString::fromUtf8(template_file.readAll());
@@ -410,16 +359,24 @@ void ResumeAnalyzerWidget::setResumeAnalysis(const QJsonObject &resumeAnalysis)
 
     const QString brief = analysis.value(QStringLiteral("brief_description")).toString();
     const QString profession = analysis.value(QStringLiteral("profession_name")).toString();
-    const QString experience = experienceLabel(analysis.value(QStringLiteral("experience")).toString());
+    const QString experience = JsonFormatter::experienceLabel(analysis.value(QStringLiteral("experience")).toString());
 
     html.replace(QStringLiteral("{{profession_name}}"), profession.toHtmlEscaped());
     html.replace(QStringLiteral("{{experience}}"), experience.toHtmlEscaped());
     html.replace(QStringLiteral("{{brief_description}}"), brief.toHtmlEscaped());
-    html.replace(QStringLiteral("{{skills}}"), formatArray(analysis.value(QStringLiteral("skills_sorted_by_level")), true));
-    html.replace(QStringLiteral("{{languages}}"), formatArray(analysis.value(QStringLiteral("languages_with_level")), true));
-    html.replace(QStringLiteral("{{work_formats}}"), formatArray(analysis.value(QStringLiteral("work_formats")), false));
-    html.replace(QStringLiteral("{{work_schedule_by_days}}"), formatArray(analysis.value(QStringLiteral("work_schedule_by_days")), false));
-    html.replace(QStringLiteral("{{working_hours}}"), formatArray(analysis.value(QStringLiteral("working_hours")), false));
+
+    // Лямбда выражение, заменяет пустое значение на 'Не указано' и соединяет слова точками
+    const auto formattedArray = [](const QJsonValue &value, bool includeLevel) {
+        const QStringList values = JsonFormatter::formatArray(value, includeLevel);
+        return values.isEmpty() ? QStringLiteral("Не указано")
+                                : values.join(QStringLiteral(" · ")).toHtmlEscaped();
+    };
+
+    html.replace(QStringLiteral("{{skills}}"), formattedArray(analysis.value(QStringLiteral("skills_sorted_by_level")), true));
+    html.replace(QStringLiteral("{{languages}}"), formattedArray(analysis.value(QStringLiteral("languages_with_level")), true));
+    html.replace(QStringLiteral("{{work_formats}}"), formattedArray(analysis.value(QStringLiteral("work_formats")), false));
+    html.replace(QStringLiteral("{{work_schedule_by_days}}"), formattedArray(analysis.value(QStringLiteral("work_schedule_by_days")), false));
+    html.replace(QStringLiteral("{{working_hours}}"), formattedArray(analysis.value(QStringLiteral("working_hours")), false));
 
     analysis_browser->setHtml(html);
 }

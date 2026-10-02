@@ -11,6 +11,76 @@ QFrame#resumeCard:hover {
 
 QLabel#resumeCardName {
 	color: #e9eaf1;
-	font-size: 13px;
+	font-size: 15px;
 	font-weight: 600;
+}
+
+QPushButton#analyzeResumeButton {
+	color: #e5e1ff;
+	background: #29263d;
+	border: 1px solid #48416d;
+	border-radius: 8px;
+	padding: 7px 11px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+QPushButton#analyzeResumeButton:hover {
+	background: #373153;
+	border-color: #625a91;
+}
+
+QPushButton#analyzeResumeButton:pressed {
+	background: #242136;
+}
+
+QToolButton#deleteResumeButton {
+	background: #3a232b;
+	border: 1px solid #63343e;
+	border-radius: 8px;
+	padding: 6px;
+}
+
+QToolButton#deleteResumeButton:hover {
+	background: #552b35;
+	border-color: #914553;
+}
+
+QToolButton#deleteResumeButton:pressed {
+	background: #6b303c;
+}
+
+QLabel#resumeBriefDescription {
+	color: #c2c6d1;
+	font-size: 12px;
+}
+
+QScrollArea#resumeTopicsScrollArea {
+	background: transparent;
+	border: 0;
+}
+
+QLabel#resumeTopic {
+	color: #d9d5ff;
+	background: #29263d;
+	border-radius: 9px;
+	padding: 6px 10px;
+	font-size: 12px;
+}
+
+QScrollBar:horizontal {
+	background: transparent;
+	height: 5px;
+	margin: 0;
+}
+
+QScrollBar::handle:horizontal {
+	background: #514b70;
+	border-radius: 2px;
+	min-width: 24px;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+	width: 0;
 }

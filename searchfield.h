@@ -2,6 +2,7 @@
 #define SEARCHFIELD_H
 
 #include <QLineEdit>
+#include "stylesheetloader.h"
 
 class SearchField : public QLineEdit
 {

@@ -1,18 +1,5 @@
 #include "vacanciessearchwidget.h"
 
-#include "apiclient.h"
-#include "filterbutton.h"
-#include "searchfield.h"
-#include "stylesheetloader.h"
-#include "vacancycard.h"
-
-#include <QHBoxLayout>
-#include <QJsonObject>
-#include <QLabel>
-#include <QLineEdit>
-#include <QScrollArea>
-#include <QVBoxLayout>
-
 VacanciesSearchWidget::VacanciesSearchWidget(ApiClient *apiClient, QWidget *parent)
     : QWidget(parent),
       api_client(apiClient),

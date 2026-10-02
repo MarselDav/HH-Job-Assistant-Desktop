@@ -1,25 +1,14 @@
 #include "mainwindow.h"
 
-#include "apiclient.h"
-#include "resumeanalyzerwidget.h"
-#include "stylesheetloader.h"
-#include "vacanciessearchwidget.h"
-
-#include <QHBoxLayout>
-#include <QButtonGroup>
-#include <QLabel>
-#include <QPushButton>
-#include <QStackedWidget>
-#include <QVBoxLayout>
-#include <QWidget>
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       page_stack(new QStackedWidget(this)),
       api_client(new ApiClient(this)),
+      resume_manager(new ResumeHistoryManager),
       resume_button(nullptr)
 {
     setWindowTitle(QStringLiteral("HH-Job-Assistant"));
+    setWindowIcon(QIcon(QStringLiteral(":/icons/images/assistant.png")));
     resize(1180, 780);
     setMinimumSize(860, 600);
     setStyleSheet(loadStyleSheet(QStringLiteral(":/stylesheets/mainwindow.qss")));
@@ -86,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     navigation_group->addButton(resume_button);
 
     QWidget *vacancies_page = new VacanciesSearchWidget(api_client, page_stack);
-    QWidget *resume_page = new ResumeAnalyzerWidget(api_client, page_stack);
+    QWidget *resume_page = new ResumeAnalyzerWidget(api_client, resume_manager, page_stack);
     page_stack->addWidget(vacancies_page);
     page_stack->addWidget(resume_page);
 

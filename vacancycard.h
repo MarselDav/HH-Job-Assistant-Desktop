@@ -2,9 +2,15 @@
 #define VACANCYCARD_H
 
 #include <QFrame>
+#include <QDesktopServices>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QString>
+#include <QUrl>
+#include <QVBoxLayout>
 #include <QtGlobal>
-
-class QLabel;
+#include "stylesheetloader.h"
 
 class VacancyCard : public QFrame
 {

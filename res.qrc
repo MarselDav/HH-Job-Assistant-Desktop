@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="images/filter.png">images/filter.png</file>
+        <file>images/bin.png</file>
+        <file>images/assistant.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file alias="mainwindow.qss">stylesheets/mainwindow.qss</file>
